@@ -1,4 +1,42 @@
 \
+// === Force apex + HTTPS, and inject canonical/OG ===
+(function () {
+  var TARGET_HOST = 'crownandoakcapital.com';
+
+  // Skip in local dev
+  if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return;
+
+  // Hard redirect any non-target host or non-HTTPS to the apex HTTPS URL
+  if (location.hostname !== TARGET_HOST || location.protocol !== 'https:') {
+    var to = 'https://' + TARGET_HOST + location.pathname + location.search + location.hash;
+    window.location.replace(to);
+    return; // stop running on the wrong host
+  }
+
+  // Helpers
+  function ensure(sel, make) {
+    var el = document.querySelector(sel);
+    if (!el) { el = make(); document.head.appendChild(el); }
+    return el;
+  }
+  var pageURL = 'https://' + TARGET_HOST + location.pathname + location.search;
+
+  // Canonical
+  ensure('link[rel="canonical"]', function () {
+    var l = document.createElement('link');
+    l.rel = 'canonical';
+    l.href = pageURL;
+    return l;
+  });
+
+  // Open Graph URL
+  ensure('meta[property="og:url"]', function () {
+    var m = document.createElement('meta');
+    m.setAttribute('property', 'og:url');
+    m.setAttribute('content', pageURL);
+    return m;
+  });
+})();
 (function(){
   function $(s,r){return (r||document).querySelector(s)}
   function $$(s,r){return Array.from((r||document).querySelectorAll(s))}
