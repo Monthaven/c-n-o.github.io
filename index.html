@@ -224,6 +224,7 @@
       width: 100%;
       transition: opacity 1.2s ease, transform 1.2s ease;
       margin-bottom: 10px;
+      animation: fadeUp 1.0s ease forwards 0.30s;
     }
     
     .intro-welcome {
@@ -239,6 +240,7 @@
       transform: translateY(20px);
       transition: opacity 1.2s ease, transform 1.2s ease;
       transition-delay: 0.5s;
+      animation: fadeUp 1.0s ease forwards 0.70s;
     }
     
     .intro-tagline {
@@ -256,6 +258,7 @@
       transition: opacity 1.2s ease, transform 1.2s ease;
       transition-delay: 1s;
       padding: 0 10px;
+      animation: fadeUp 1.0s ease forwards 1.30s;
     }
     
     .intro-stats {
@@ -270,6 +273,7 @@
       transition: opacity 1.2s ease, transform 1.2s ease;
       transition-delay: 1.5s;
       flex-wrap: wrap;
+      animation: fadeUp 1.0s ease forwards 1.60s;
     }
     
     .stat-item {
@@ -310,6 +314,7 @@
       opacity: 0;
       transition: opacity 1.2s ease;
       transition-delay: 1.3s;
+      animation: fadeOnly 0.9s ease forwards 1.00s;
     }
     
     .enter-btn {
@@ -318,6 +323,7 @@
       transform: translateY(20px);
       transition: opacity 1.2s ease, transform 1.2s ease;
       transition-delay: 2s;
+      animation: fadeUp 1.0s ease forwards 1.90s;
     }
     
     /* Animation Classes */
@@ -501,31 +507,6 @@
       overlay.addEventListener('click', () => 
         document.body.classList.remove('nav-open')
       );
-      
-      // Intro animations - slightly faster sequence
-      setTimeout(() => {
-        document.querySelector('.intro-logo').classList.add('fade-in');
-      }, 300);
-      
-      setTimeout(() => {
-        document.querySelector('.intro-welcome').classList.add('fade-in');
-      }, 700);
-      
-      setTimeout(() => {
-        document.querySelector('.separator').classList.add('fade-in');
-      }, 1000);
-      
-      setTimeout(() => {
-        document.querySelector('.intro-tagline').classList.add('fade-in');
-      }, 1300);
-      
-      setTimeout(() => {
-        document.querySelector('.intro-stats').classList.add('fade-in');
-      }, 1600);
-      
-      setTimeout(() => {
-        document.querySelector('.enter-btn').classList.add('fade-in');
-      }, 1900);
       
       // Enter site button functionality
       document.getElementById('enter-site').addEventListener('click', (e) => {
