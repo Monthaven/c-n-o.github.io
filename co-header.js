@@ -78,3 +78,60 @@
     }
   }catch(e){}
 })();
+// === Analytics + JSON-LD (GA only) ===
+(function () {
+  var TARGET_HOST = 'crownandoakcapital.com';
+  var GA_ID = 'G-GEG78J7ZTB'; // <-- replace with your GA4 ID
+
+  if (location.hostname !== TARGET_HOST) return;
+
+  function addScript(src, attrs) {
+    var s = document.createElement('script');
+    s.src = src; s.async = true;
+    if (attrs) Object.keys(attrs).forEach(function(k){ s.setAttribute(k, attrs[k]); });
+    document.head.appendChild(s);
+    return s;
+  }
+
+  function afterIdle(fn) {
+    if ('requestIdleCallback' in window) return requestIdleCallback(fn, { timeout: 3000 });
+    var fired = false; var run = function(){ if (!fired){ fired = true; fn(); } };
+    setTimeout(run, 2000);
+    ['scroll','mousemove','keydown','touchstart'].forEach(function(ev){
+      window.addEventListener(ev, run, { once:true, passive:true });
+    });
+  }
+
+  // Google Analytics 4
+  function loadGA() {
+    if (!GA_ID) return;
+    addScript('https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID));
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', GA_ID, { anonymize_ip: true });
+  }
+
+  afterIdle(loadGA);
+
+  // JSON-LD
+  function addJsonLd(obj) {
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify(obj);
+    document.head.appendChild(s);
+  }
+  addJsonLd({
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"Crown & Oak Capital",
+    "url":"https://crownandoakcapital.com/",
+    "logo":"https://crownandoakcapital.com/images/Logo.png"
+  });
+  addJsonLd({
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Crown & Oak Capital",
+    "url":"https://crownandoakcapital.com/"
+  });
+})();
