@@ -2,5 +2,9 @@
 User-agent: *
 Allow: /
 
+<<<<<<< HEAD
 # Update this if you move to a custom domain
 Sitemap: https://c-n-o.github.io/sitemap.xml
+=======
+Sitemap: https://crownandoakcapital.com/sitemap.xml
+>>>>>>> c075adf24f1e414d2133273ce19231f86a62551d

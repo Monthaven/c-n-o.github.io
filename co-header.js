@@ -1,4 +1,42 @@
 \
+// === Force apex + HTTPS, and inject canonical/OG ===
+(function () {
+  var TARGET_HOST = 'crownandoakcapital.com';
+
+  // Skip in local dev
+  if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return;
+
+  // Hard redirect any non-target host or non-HTTPS to the apex HTTPS URL
+  if (location.hostname !== TARGET_HOST || location.protocol !== 'https:') {
+    var to = 'https://' + TARGET_HOST + location.pathname + location.search + location.hash;
+    window.location.replace(to);
+    return; // stop running on the wrong host
+  }
+
+  // Helpers
+  function ensure(sel, make) {
+    var el = document.querySelector(sel);
+    if (!el) { el = make(); document.head.appendChild(el); }
+    return el;
+  }
+  var pageURL = 'https://' + TARGET_HOST + location.pathname + location.search;
+
+  // Canonical
+  ensure('link[rel="canonical"]', function () {
+    var l = document.createElement('link');
+    l.rel = 'canonical';
+    l.href = pageURL;
+    return l;
+  });
+
+  // Open Graph URL
+  ensure('meta[property="og:url"]', function () {
+    var m = document.createElement('meta');
+    m.setAttribute('property', 'og:url');
+    m.setAttribute('content', pageURL);
+    return m;
+  });
+})();
 (function(){
   function $(s,r){return (r||document).querySelector(s)}
   function $$(s,r){return Array.from((r||document).querySelectorAll(s))}
@@ -39,4 +77,61 @@
       }
     }
   }catch(e){}
+})();
+// === Analytics + JSON-LD (GA only) ===
+(function () {
+  var TARGET_HOST = 'crownandoakcapital.com';
+  var GA_ID = 'G-GEG78J7ZTB'; // <-- replace with your GA4 ID
+
+  if (location.hostname !== TARGET_HOST) return;
+
+  function addScript(src, attrs) {
+    var s = document.createElement('script');
+    s.src = src; s.async = true;
+    if (attrs) Object.keys(attrs).forEach(function(k){ s.setAttribute(k, attrs[k]); });
+    document.head.appendChild(s);
+    return s;
+  }
+
+  function afterIdle(fn) {
+    if ('requestIdleCallback' in window) return requestIdleCallback(fn, { timeout: 3000 });
+    var fired = false; var run = function(){ if (!fired){ fired = true; fn(); } };
+    setTimeout(run, 2000);
+    ['scroll','mousemove','keydown','touchstart'].forEach(function(ev){
+      window.addEventListener(ev, run, { once:true, passive:true });
+    });
+  }
+
+  // Google Analytics 4
+  function loadGA() {
+    if (!GA_ID) return;
+    addScript('https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA_ID));
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', GA_ID, { anonymize_ip: true });
+  }
+
+  afterIdle(loadGA);
+
+  // JSON-LD
+  function addJsonLd(obj) {
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify(obj);
+    document.head.appendChild(s);
+  }
+  addJsonLd({
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"Crown & Oak Capital",
+    "url":"https://crownandoakcapital.com/",
+    "logo":"https://crownandoakcapital.com/images/Logo.png"
+  });
+  addJsonLd({
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Crown & Oak Capital",
+    "url":"https://crownandoakcapital.com/"
+  });
 })();
