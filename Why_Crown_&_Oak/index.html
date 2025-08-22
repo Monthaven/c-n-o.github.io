@@ -987,27 +987,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Header scroll effect
-      const header = document.querySelector('.header');
-      window.addEventListener('scroll', function() {
-        if (window.scrollY > 50) {
-          header.classList.add('header-scrolled');
-        } else {
-          header.classList.remove('header-scrolled');
-        }
-      });
-      
-      // Mobile navigation toggle
-      const navToggle = document.querySelector('.nav-toggle');
-      const overlay = document.querySelector('.overlay');
-      navToggle.addEventListener('click', function() {
-        document.body.classList.toggle('nav-open');
-      });
-      overlay.addEventListener('click', function() {
-        document.body.classList.remove('nav-open');
-      });
-      
-      // Animations on scroll
+    // Animations on scroll
       const animateOnScroll = function() {
         const elements = document.querySelectorAll('.pillar, .stat-item, .proof-logo-box, .testimonial');
         elements.forEach(element => {
