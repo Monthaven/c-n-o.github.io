@@ -185,17 +185,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const $ = (s, r=document) => r.querySelector(s);
 
-  // Header scroll effect
-  const header = $('.header');
-  window.addEventListener('scroll', () => {
-    if (header) header.classList.toggle('header-scrolled', window.scrollY > 50);
-  });
-
-  // Mobile navigation toggle
-  const toggle = $('.nav-toggle'), overlay = $('.overlay');
-  toggle?.addEventListener('click', () => document.body.classList.toggle('nav-open'));
-  overlay?.addEventListener('click', () => document.body.classList.remove('nav-open'));
-
   // Intro sequence (robust JS reveal)
   [
     ['.intro-logo',     300],
