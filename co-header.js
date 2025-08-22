@@ -47,6 +47,27 @@
   if(toggle){ toggle.addEventListener('click',function(){ document.documentElement.classList.toggle('nav-open'); document.body.classList.toggle('nav-open'); }); }
   if(overlay){ overlay.addEventListener('click',function(){ document.documentElement.classList.remove('nav-open'); document.body.classList.remove('nav-open'); }); }
 
+  if(ticker){
+    var tickerWrapper=$('.ticker-wrapper',ticker);
+    var originalHTML=tickerWrapper?tickerWrapper.innerHTML:'';
+    fetch('/data/ticker.json').then(function(res){
+      if(!res.ok) throw new Error('bad response');
+      return res.json();
+    }).then(function(json){
+      if(!tickerWrapper||!json||!Array.isArray(json.items)) return;
+      tickerWrapper.innerHTML='';
+      json.items.concat(json.items).forEach(function(text){
+        var span=document.createElement('span');
+        span.textContent=text;
+        tickerWrapper.appendChild(span);
+      });
+      updateTicker();
+    }).catch(function(){
+      if(tickerWrapper) tickerWrapper.innerHTML=originalHTML;
+      updateTicker();
+    });
+  }
+
   // file:// fallback for links, assets, and logo image
   try{
     var isFile = location.protocol==='file:';
