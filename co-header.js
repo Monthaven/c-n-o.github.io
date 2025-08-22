@@ -1,4 +1,3 @@
-\
 // === Force apex + HTTPS, and inject canonical/OG ===
 (function () {
   var TARGET_HOST = 'crownandoakcapital.com';
