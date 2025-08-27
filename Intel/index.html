@@ -341,11 +341,16 @@
 </header>
 <div class="overlay" aria-hidden="true"></div>
 
-  <div class="ticker">
-    <span>10Y Treasury: 3.85%</span>
-    <span>Avg Cap-Rate: 5.2%</span>
-    <span>LTV Avg: 65%</span>
-  </div>
+  <div class="ticker" id="ticker" aria-live="polite"></div>
+  <script>
+  (async function(){
+    const res = await fetch('/data/ticker.json', { cache:'no-store' });
+    const { series, updatedAt } = await res.json();
+    document.getElementById('ticker').innerHTML =
+      series.map(s => `<span>${s.id}: ${s.value.toFixed ? s.value.toFixed(2)+'%' : s.value}</span>`).join('')
+      + `<span style=\"opacity:.6\">Updated ${new Date(updatedAt).toLocaleDateString()}</span>`;
+  })();
+  </script>
 
   
 
@@ -357,7 +362,7 @@
     <section class="summary">
       <ul>
         <li>National cap-rate compression continues in secondary markets.</li>
-        <li>Rent growth accelerated 4.5% year-over-year.</li>
+        <li>Rent growth accelerated <span data-kpi="rentYoY"></span>% year-over-year.</li>
         <li>Financing costs expected to stabilize in Q3 2025.</li>
         <li>Logistics and life sciences remain high-conviction sectors.</li>
       </ul>
@@ -385,12 +390,16 @@
 
     <section class="viz-panel">
       <div class="viz">
-        <h4>Cap-Rate Heat Map</h4>
-        <!-- Embed interactive map here -->
+        <h4>Market Navigator</h4>
+        <div id="market-navigator" style="height:240px"></div>
+        <a href="#" data-method="/data/navigator/points.json">ⓘ Methodology</a>
       </div>
       <div class="viz">
-        <h4>Rent Growth Index</h4>
-        <!-- Embed time-series chart here -->
+        <h4>Thesis Wizard</h4>
+        <input id="leverage" type="range" min="0.4" max="0.8" step="0.05" value="0.65">
+        <input id="entryCap" type="range" min="4" max="9" step="0.25" value="6">
+        <div id="thesis-output"></div>
+        <a href="#" data-method="/data/msa/houston.json">ⓘ Methodology</a>
       </div>
     </section>
 
@@ -446,6 +455,14 @@
     </div>
   </div>
 
+  <dialog id="methodology-dialog">
+    <p id="methodology-content"></p>
+    <button id="methodology-close">Close</button>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script src="/assets/js/market-navigator.js"></script>
+  <script src="/assets/js/intel.js"></script>
   <script src="/co-header.js"></script>
 </body>
 </html>
