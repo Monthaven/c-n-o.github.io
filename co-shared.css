@@ -25,3 +25,6 @@ body.page-with-fixed-header{padding-top:120px}
 /* FOOTER */
 .footer{padding:40px 0;text-align:center;border-top:1px solid rgba(212,180,90,0.1)}
 .footer-text{font-size:14px;color:rgba(212,180,90,0.6)}
+.footer-links{font-size:14px;color:rgba(212,180,90,0.6)}
+.footer-links a{color:rgba(212,180,90,0.6);text-decoration:none;margin:0 8px}
+.footer-links a:hover{color:var(--co-gold)}
