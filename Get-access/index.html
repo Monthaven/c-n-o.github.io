@@ -1864,6 +1864,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ------------- VALIDATION --------------- */
   const form = document.querySelector('.investment-form');
+
+  // Ensure all form fields have a name attribute so they can be
+  // collected and sent to Web3Forms
+  form.querySelectorAll('input, select, textarea').forEach((el, idx) => {
+    if (!el.name) el.name = el.id || `field_${idx}`;
+  });
+
   form.addEventListener('submit', e => {
     e.preventDefault();
     let valid = true;
@@ -1896,8 +1903,22 @@ document.addEventListener('DOMContentLoaded', () => {
       form.querySelector('.error')?.scrollIntoView({ behavior:'smooth', block:'center' });
       return;
     }
+    
+    const formData = Object.fromEntries(new FormData(form).entries());
+    formData.access_key = 'YOUR_ACCESS_KEY';
 
-    form.innerHTML = `
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(async response => {
+      const json = await response.json();
+      if (response.ok) {
+        form.innerHTML = `
       <div style="text-align:center; padding:40px 20px;">
         <div style="font-size:24px; margin-bottom:15px; color:#d4b45a; font-family:'Cormorant Garamond',serif;">
           Criteria Successfully Submitted
@@ -1912,6 +1933,11 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>`;
     form.style.padding = '60px';
     form.querySelector('div').scrollIntoView({ behavior:'smooth', block:'center' });
+        } else {
+        alert(json.message || 'Form submission failed');
+      }
+    })
+    .catch(() => alert('Form submission failed'));
   });
 });
 </script>
