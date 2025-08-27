@@ -3,383 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crown & Oak Capital — Market Intelligence & Insights</title>
+  <title>Crown & Oak Capital — Market Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="/co-shared.css">
   <style>
-    /* — RESET & BASE — */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #0a0c14;
       color: #d4b45a;
       font-family: 'Montserrat', sans-serif;
       font-weight: 300;
       line-height: 1.6;
-      padding-top: 160px; /* ticker (40px) + header (~120px) */
-      min-height: 100vh;
     }
-    a { text-decoration: none; color: inherit; }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-
-    /* — HEADER & NAV — */
-    .header {
-      width: 100%;
-      position: fixed;
-      left: 0;
-      z-index: 1000;
-      transition: all 0.4s ease;
-    }
-    .header-scrolled {
-      background: rgba(10, 12, 20, 0.98);
-      backdrop-filter: saturate(180%) blur(10px);
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    }
-    .header-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: clamp(15px, 2vw, 25px) clamp(30px, 5vw, 50px);
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .logo img {
-      display: block;
-      max-height: clamp(65px, 4vw, 75px);
-      width: auto;
-      transition: all 0.3s ease;
-    }
-    .header-scrolled .logo img {
-      max-height: clamp(55px, 3.5vw, 65px);
-    }
-    .nav-menu {
-      display: flex;
-      align-items: center;
-    }
-    .nav-list {
-      display: flex;
-      list-style: none;
-    }
-    .nav-item {
-      margin: 0 clamp(25px, 3vw, 40px);
-    }
-    .nav-link {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(14px, 1.2vw, 18px);
-      font-weight: 500;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: rgba(212, 180, 90, 0.85);
-      position: relative;
-      padding: 8px 0;
-      transition: color 0.25s ease, transform 0.25s ease;
-    }
-    .nav-link:hover,
-    .nav-link.active {
-      color: #d4b45a;
-      transform: translateY(-1px);
-    }
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 50%;
-      width: 0; height: 2px;
-      background: #d4b45a;
-      transition: width 0.3s ease, left 0.3s ease;
-    }
-    .nav-link:hover::after,
-    .nav-link.active::after {
-      width: 100%; left: 0;
-    }
-    .nav-cta {
-      margin-left: clamp(40px, 5vw, 60px);
-    }
-    .cta-btn {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(15px, 1.5vw, 20px);
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 12px 30px;
-      background: transparent;
-      color: #d4b45a;
-      border: 2px solid #d4b45a;
-      border-radius: 4px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    }
-    .cta-btn:hover {
-      background: #d4b45a;
-      color: #0a0c14;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(212,180,90,0.3);
-    }
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      width: 30px; height: 22px;
-      position: relative; z-index: 1002;
-    }
-    .nav-toggle span {
-      display: block; width: 100%; height: 2px;
-      background: #d4b45a;
-      position: absolute; left: 0;
-      transition: all 0.3s;
-    }
-    .nav-toggle span:nth-child(1) { top: 0; }
-    .nav-toggle span:nth-child(2) { top: 10px; }
-    .nav-toggle span:nth-child(3) { top: 20px; }
-    .nav-open .nav-toggle span:nth-child(1) {
-      transform: rotate(45deg); top: 10px;
-    }
-    .nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
-    .nav-open .nav-toggle span:nth-child(3) {
-      transform: rotate(-45deg); top: 10px;
-    }
-    .overlay {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      opacity: 0; visibility: hidden;
-      transition: all 0.4s;
-      z-index: 999;
-    }
-    .nav-open .overlay {
-      opacity: 1; visibility: visible;
-    }
-    @media (max-width: 1024px) {
-      .nav-toggle { display: block; }
-      .nav-menu {
-        position: fixed; right: -100%;
-        width: 300px; max-width: 80%; height: 100vh;
-        background: rgba(10,12,20,0.98);
-        backdrop-filter: saturate(180%) blur(10px);
-        flex-direction: column; padding: 100px 30px 30px;
-        transition: right 0.4s ease; overflow-y: auto;
-      }
-      .nav-open .nav-menu { right: 0; }
-      .nav-list { flex-direction: column; width: 100%; }
-      .nav-item { margin: 12px 0; text-align: center; }
-      .cta-btn { width: 100%; text-align: center; }
-    }
-    @media (max-width: 768px) {
-      .nav-link { font-size: clamp(12px,2vw,16px); letter-spacing: 2px; }
-      .cta-btn { font-size: clamp(14px,2vw,18px); padding: 10px 24px; }
-    }
-
-    /* — LIVE TICKER — */
-    .ticker {
-      position: fixed; top: 120px; left: 0; right: 0;
-      background: #14161E;
-      color: #d4b45a;
-      font-size: 14px;
-      display: flex; justify-content: center;
-      padding: 8px 0;
-      border-bottom:1px solid rgba(212,180,90,0.2);
-      z-index: 999;
-    }
-    .ticker span { margin: 0 20px; }
-
-    /* — HERO & EXEC SUMMARY — */
-    .page-header { text-align: center; margin-bottom: 60px; }
+    .page-header { text-align: center; margin-bottom: 40px; }
     .page-header h1 {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(32px, 6vw, 48px);
-      font-weight: 600; letter-spacing: 4px;
-      margin-bottom: 16px; text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
     }
     .page-header p {
-      font-size: clamp(16px, 1.2vw, 20px);
       color: rgba(212,180,90,0.85);
-      max-width: 700px; margin: 0 auto 40px;
+      max-width: 700px;
+      margin: 0 auto;
     }
-    .summary {
-      background: #14161E; padding: 30px; border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      margin-bottom: 60px;
-    }
-    .summary ul { list-style: none; }
-    .summary li {
-      margin: 12px 0; font-size: 15px;
-    }
-    .summary li:before {
-      content: '•'; margin-right: 8px; color: #d4b45a;
-    }
-
-    /* — FEATURED REPORT CAROUSEL — */
-    .carousel {
-      display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px;
-    }
-    .card {
-      flex: 0 0 300px;
-      background: #1A1C27;
-      border: 1px solid rgba(212,180,90,0.1);
-      border-radius: 8px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-    .card.highlight { border-color: #d4b45a; }
-    .card img {
-      width: 100%; border-top-left-radius: 8px; border-top-right-radius: 8px;
-    }
-    .card-content { padding: 20px; }
-    .card-content h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 20px; margin-bottom: 8px;
-    }
-    .card-content p {
-      font-size: 14px; color: rgba(212,180,90,0.8); margin-bottom: 12px;
-    }
-    .card-content .btn {
-      display: inline-block; padding: 10px 24px;
-      background: #d4b45a; color: #0a0c14;
-      border-radius: 4px; text-transform: uppercase;
-      font-size: 14px;
-    }
-
-    /* — VISUALIZATION PANEL — */
-    .viz-panel {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 60px;
-    }
-    .viz {
-      background: #14161E; border: 1px solid rgba(212,180,90,0.1);
-      border-radius: 8px; padding: 20px; height: 300px;
-    }
-    .viz h4 {
-      font-family: 'Cormorant Garamond', serif;
-      margin-bottom: 12px; text-transform: uppercase; font-size: 16px;
-    }
-
-    /* — CASE STUDIES GRID — */
-    .cases { margin-bottom: 60px; }
-    .cases-grid {
-      display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
-      gap: 30px;
-    }
-    .case-card {
-      background: #1A1C27; border: 1px solid rgba(212,180,90,0.1);
-      border-radius: 8px; padding: 20px;
-    }
-    .case-card h4 {
-      font-family: 'Cormorant Garamond', serif; margin-bottom: 8px;
-    }
-    .case-card p {
-      font-size: 14px; color: rgba(212,180,90,0.8); margin-bottom: 12px;
-    }
-    .case-card .link {
-      color: #d4b45a; font-size: 14px;
-    }
-
-    /* — ARTICLES & RECOMMENDATIONS — */
-    .articles, .recommendations { margin-bottom: 60px; }
-    .articles h3, .recommendations h3 {
-      font-family: 'Cormorant Garamond', serif; font-size: 22px; margin-bottom: 16px;
-    }
-    .article-list, .rec-list { list-style: none; }
-    .article-list li, .rec-list li { margin-bottom: 16px; }
-    .article-list a, .rec-list a { font-weight: 500; font-size: 16px; }
-    .article-list span.flag, .rec-list span.flag {
-      background: #d4b45a; color: #0a0c14;
-      padding: 2px 6px; font-size: 12px; margin-left: 8px;
-      border-radius: 3px;
-    }
-
-    /* — NEWSLETTER SIGNUP — */
-    .newsletter {
-      background: #14161E; padding: 30px; border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4); margin-bottom: 60px;
-      text-align: center;
-    }
+    .snapshot, .featured, .articles, .newsletter { margin-bottom: 60px; }
+    .snapshot ul { list-style: none; padding: 0; }
+    .snapshot li { margin: 8px 0; font-size: 15px; }
+    .snapshot li::before { content: '\2022'; margin-right: 8px; color: #d4b45a; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .card { background: #14161E; border: 1px solid rgba(212,180,90,0.1); border-radius: 8px; padding: 20px; }
+    .card h3 { font-family: 'Cormorant Garamond', serif; margin-bottom: 8px; font-size: 20px; }
+    .card p { font-size: 14px; color: rgba(212,180,90,0.8); margin-bottom: 12px; }
+    .card a { color: #d4b45a; font-size: 14px; }
+    .article-list { list-style: none; padding: 0; }
+    .article-list li { margin-bottom: 16px; }
     .newsletter input[type=email] {
-      padding: 12px; width: 60%; max-width: 300px; margin-right: 8px;
+      padding: 12px;
+      width: 60%;
+      max-width: 280px;
+      margin-right: 8px;
       border: 1px solid rgba(212,180,90,0.2);
-      background: transparent; color: #d4b45a;
+      background: transparent;
+      color: #d4b45a;
     }
     .newsletter button {
-      padding: 12px 24px; background: #d4b45a; color: #0a0c14;
-      text-transform: uppercase; border: none; cursor: pointer;
-    }
-
-    /* — RESOURCES & CTA — */
-    .resources { margin-bottom: 60px; }
-    .resources a { display: block; margin: 8px 0; font-size: 14px; }
-    .cta-secondary { text-align: center; margin-bottom: 80px; }
-    .cta-secondary .btn {
-      padding: 12px 36px; background: transparent;
-      border: 1px solid #d4b45a; border-radius: 4px;
-      text-transform: uppercase;
-    }
-
-    @media (max-width: 768px) {
-      .viz-panel { grid-template-columns: 1fr; }
-      .carousel { overflow-x: scroll; }
-    }
-
-    /* — FED RATE WIDGET — */
-    .fed-widget {
-      background: #14161E;
-      border: 1px solid rgba(212,180,90,0.1);
-      border-radius: 8px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      margin-bottom: 60px;
-    }
-    .fed-widget h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-    }
-    .fed-widget .next-meeting {
-      font-size: 14px;
-      color: rgba(212,180,90,0.7);
-      margin-bottom: 20px;
-    }
-    .fed-widget .fed-content {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .fed-widget .fed-rate .label {
-      font-size: 14px;
-      color: rgba(212,180,90,0.7);
-    }
-    .fed-widget .fed-rate .rate {
-      font-size: 28px;
-      font-weight: 600;
-    }
-    .fed-widget button {
       padding: 12px 24px;
-      background: transparent;
-      border: 1px solid #d4b45a;
-      color: #d4b45a;
-      text-transform: uppercase;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .fed-widget button:hover {
       background: #d4b45a;
       color: #0a0c14;
-    }
-    .fed-widget .fed-report {
-      margin-top: 20px;
-      background: #1A1C27;
-      border: 1px solid rgba(212,180,90,0.1);
-      border-radius: 8px;
-      padding: 20px;
-    }
-    .fed-widget .error {
-      background: #7b1d1d;
-      padding: 10px 15px;
-      border-radius: 4px;
-      margin-bottom: 15px;
-      color: #f2d6d6;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
     }
   </style>
-  <link rel="stylesheet" href="/co-shared.css">
 </head>
 <body class="page-with-fixed-header">
 <header class="header" role="banner">
@@ -402,249 +82,71 @@
   </div>
 </header>
 <div class="overlay" aria-hidden="true"></div>
-
-  <div class="ticker" id="ticker" aria-live="polite"></div>
-  <script>
-  (async function(){
-    const res = await fetch('/data/ticker.json', { cache:'no-store' });
-    const { series, updatedAt } = await res.json();
-    document.getElementById('ticker').innerHTML =
-      series.map(s => `<span>${s.id}: ${s.value.toFixed ? s.value.toFixed(2)+'%' : s.value}</span>`).join('')
-      + `<span style=\"opacity:.6\">Updated ${new Date(updatedAt).toLocaleDateString()}</span>`;
-  })();
-  </script>
-
-  
-
-  
-
-  <div class="container">
-    <div id="fed-widget-root"></div>
-
-    <section class="summary">
-      <ul>
-        <li>National cap-rate compression continues in secondary markets.</li>
-        <li>Rent growth accelerated <span data-kpi="rentYoY"></span>% year-over-year.</li>
-        <li>Financing costs expected to stabilize in Q3 2025.</li>
-        <li>Logistics and life sciences remain high-conviction sectors.</li>
-      </ul>
-    </section>
-
-    <section class="carousel">
-      <div class="card highlight">
-        <img src="/images/Gemini_Generated_Image_8sd4ws8sd4ws8sd4.jpeg" alt="Q2 2025 Report">
-        <div class="card-content">
-          <h3>Q2 2025 Houston Market Outlook</h3>
-          <p>Cap rates compressing in secondary markets; rents rising 4% YoY.</p>
-          <a href="../images/Q2_2025_Houston_Market_Outlook.pdf" class="btn" target="_blank">Download Report</a>
-        </div>
-      </div>
-      <div class="card">
-        <img src="/images/Gemini_Generated_Image_rzqhobrzqhobrzqh.jpeg" alt="Case Study">
-        <div class="card-content">
-          <h3>Value-Add Case Study</h3>
-          <p>20% IRR on multifamily acquisition in Atlanta.</p>
-          <a href="../images/Atlanta_Multifamily_Value-Add_Case_Study_20_IRR.pdf" target="_blank" class="btn">Read Summary</a>
-        </div>
-      </div>
-      <!-- Additional cards -->
-    </section>
-
-    <section class="viz-panel">
-      <div class="viz">
-        <h4>Market Navigator</h4>
-        <div id="market-navigator" style="height:240px"></div>
-        <a href="#" data-method="/data/navigator/points.json">ⓘ Methodology</a>
-      </div>
-      <div class="viz">
-        <h4>Thesis Wizard</h4>
-        <input id="leverage" type="range" min="0.4" max="0.8" step="0.05" value="0.65">
-        <input id="entryCap" type="range" min="4" max="9" step="0.25" value="6">
-        <div id="thesis-output"></div>
-        <a href="#" data-method="/data/msa/houston.json">ⓘ Methodology</a>
-      </div>
-    </section>
-
-    <section class="recommendations">
-      <h3>Recommended for You</h3>
-      <ul class="rec-list">
-        <li><a href="#">Q1 2025 Gateway Markets Report</a><span class="flag">Most Popular</span></li>
-        <li><a href="#">Secondary Markets Deep Dive</a><span class="flag">New</span></li>
-        <li><a href="#">Emerging Themes 2025</a></li>
-      </ul>
-    </section>
-
-    <section class="cases">
-      <div class="cases-grid">
-        <div class="case-card">
-          <h4>Atlanta Office Park</h4>
-          <p>Achieved 18% IRR, leased to credit-rated tenants in 6 months.</p>
-          <a href="#" class="link">Learn More</a>
-        </div>
-        <div class="case-card">
-          <h4>Houston Industrial Site</h4>
-          <p>15%+ yield in under a year through strategic repositioning.</p>
-          <a href="#" class="link">Learn More</a>
-        </div>
-        <!-- Additional case cards -->
-      </div>
-    </section>
-
-    <section class="articles">
-      <h3>Thought Leadership</h3>
-      <ul class="article-list">
-        <li><a href="#">Off-Market vs. On-Market: Hidden Cost Curve</a></li>
-        <li><a href="#">Emerging Thematic Plays for 2025</a><span class="flag">Must Read</span></li>
-        <li><a href="#">Financing Outlook Q3 2025</a></li>
-      </ul>
-    </section>
-
-    <section class="newsletter">
-      <h3>Subscribe to Quarterly Off-Market Intel</h3>
-      <input type="email" placeholder="Your email address">
-      <button>Subscribe</button>
-      <p style="font-size:12px; color:rgba(212,180,90,0.5); margin-top:12px;">No spam. Unsubscribe anytime.</p>
-    </section>
-
-    <section class="resources">
-      <a href="#">All Past Reports & Archive</a>
-      <a href="#">Data Dictionary & Methodology</a>
-      <a href="#">Downloadable Spreadsheets</a>
-    </section>
-
-    <div class="cta-secondary">
-      <a href="#" class="btn">Speak with Our Research Team</a>
-    </div>
+<div class="ticker" id="ticker" aria-live="polite"></div>
+<script>
+(async function(){
+  const res = await fetch('/data/ticker.json', { cache:'no-store' });
+  const { series, updatedAt } = await res.json();
+  document.getElementById('ticker').innerHTML =
+    series.map(s => `<span>${s.id}: ${s.value.toFixed ? s.value.toFixed(2)+'%' : s.value}</span>`).join('') +
+    `<span style="opacity:.6">Updated ${new Date(updatedAt).toLocaleDateString()}</span>`;
+})();
+</script>
+<div class="container">
+  <div class="page-header">
+    <h1>Market Intel</h1>
+    <p>Actionable insights and research to inform your next investment decision.</p>
   </div>
 
-  <dialog id="methodology-dialog">
-    <p id="methodology-content"></p>
-    <button id="methodology-close">Close</button>
-  </dialog>
+  <section class="snapshot">
+    <h2>Market Snapshot</h2>
+    <ul>
+      <li>National cap-rate compression continues in secondary markets.</li>
+      <li>Rent growth accelerated <span data-kpi="rentYoY"></span>% year-over-year.</li>
+      <li>Financing costs expected to stabilize in Q3 2025.</li>
+      <li>Logistics and life sciences remain high-conviction sectors.</li>
+    </ul>
+  </section>
 
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+  <section class="featured">
+    <h2>Featured Research</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Q2 2025 Houston Market Outlook</h3>
+        <p>Cap rates compressing in secondary markets; rents rising 4% YoY.</p>
+        <a href="../images/Q2_2025_Houston_Market_Outlook.pdf" target="_blank">Download Report</a>
+      </div>
+      <div class="card">
+        <h3>Sunbelt Industrial Review</h3>
+        <p>Supply-demand imbalance is fueling double-digit rent growth.</p>
+        <a href="#">Coming Soon</a>
+      </div>
+      <div class="card">
+        <h3>Life Sciences Update</h3>
+        <p>Biotech clusters expand as VC funding rebounds.</p>
+        <a href="#">Coming Soon</a>
+      </div>
+    </div>
+  </section>
 
-    const FedWidget = () => {
-      const [fedRate, setFedRate] = useState("4.25% - 4.50%");
-      const [nextMeetingDate, setNextMeetingDate] = useState('September 17, 2025');
-      const [fedReport, setFedReport] = useState('');
-      const [loadingFed, setLoadingFed] = useState(false);
-      const [error, setError] = useState(null);
+  <section class="articles">
+    <h2>Insights &amp; Commentary</h2>
+    <ul class="article-list">
+      <li><a href="#">Rate Cuts and CRE Valuations</a></li>
+      <li><a href="#">Secondary Markets Outperforming</a></li>
+      <li><a href="#">Unlocking Value in Industrial Assets</a></li>
+    </ul>
+  </section>
 
-      const fetchWithBackoff = async (url, options, retries = 5, delay = 1000) => {
-        try {
-          const response = await fetch(url, options);
-          if (!response.ok) {
-            throw new Error('HTTP error! status: ' + response.status);
-          }
-          return response.json();
-        } catch (err) {
-          if (retries > 0) {
-            console.warn('Fetch failed. Retrying in ' + delay + 'ms...');
-            await new Promise(res => setTimeout(res, delay));
-            return fetchWithBackoff(url, options, retries - 1, delay * 2);
-          } else {
-            throw err;
-          }
-        }
-      };
-
-      const formatMarkdown = (markdown) => {
-        let html = markdown.replace(/^#\s(.+)$/gm, '<h1>$1</h1>');
-        html = html.replace(/^##\s(.+)$/gm, '<h2><b>$1</b></h2>');
-        html = html.replace(/^###\s(.+)$/gm, '<h3><b>$1</b></h3>');
-        html = html.replace(/^####\s(.+)$/gm, '<h4><b>$1</b></h4>');
-        html = html.replace(/\n\n/g, '</p><p>');
-        html = html.replace(/\n/g, '<br/>');
-        html = html.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-        html = html.replace(/^\*\s(.+)$/gm, '<li>$1</li>');
-        html = html.replace(/^- (.*)$/gm, '<li>$1</li>');
-        if (!html.startsWith('<p>') && !html.startsWith('<h1>') && !html.startsWith('<h2>') && !html.startsWith('<h3>') && !html.startsWith('<h4>') && !html.startsWith('<li>')) {
-          html = '<p>' + html + '</p>';
-        }
-        return html;
-      };
-
-      useEffect(() => {
-        setNextMeetingDate('September 17, 2025');
-      }, []);
-
-      const fetchReport = async (prompt, setReport, setLoading) => {
-        setLoading(true);
-        setReport('');
-        setError(null);
-
-        const payload = {
-          contents: [{
-            parts: [{ text: prompt }]
-          }]
-        };
-
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-        try {
-          const result = await fetchWithBackoff(apiUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-          });
-          const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) {
-            setReport(formatMarkdown(text));
-          } else {
-            setError('Failed to get a report from Gemini. Please try again.');
-          }
-        } catch (err) {
-          console.error(err);
-          setError('An error occurred while fetching the report. Please check the console.');
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      return (
-        <div className="fed-widget">
-          {error && <div className="error"><p className="font-bold">Error</p><p>{error}</p></div>}
-          <h2>Federal Funds Rate Target Range</h2>
-          <p className="next-meeting">Next FOMC Meeting: {nextMeetingDate !== null ? nextMeetingDate : 'Loading...'}</p>
-          <div className="fed-content">
-            <div className="fed-rate">
-              <p className="label">Next FOMC Rate</p>
-              <p className="rate">{fedRate}</p>
-            </div>
-            <button
-              onClick={() => {
-                const prompt = `Act as a financial analyst. Generate a concise report on the current Federal Funds Rate target range, including its historical context and its anticipated impact on commercial real estate financing and investment decisions. The current rate is ${fedRate}. Use a professional, but easy-to-understand tone. Format the response with a main title and clear subtitles using Markdown headings. Use a hyphen (-) for bullet points.`;
-                fetchReport(prompt, setFedReport, setLoadingFed);
-              }}
-              disabled={loadingFed}
-            >
-              {loadingFed ? 'Generating...' : 'Get Report'}
-            </button>
-          </div>
-          {fedReport && (
-            <div className="fed-report" dangerouslySetInnerHTML={{ __html: fedReport }} />
-          )}
-        </div>
-      );
-    };
-
-    ReactDOM.createRoot(document.getElementById('fed-widget-root')).render(<FedWidget />);
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-  <script src="/assets/js/market-navigator.js"></script>
-  <script src="/assets/js/intel.js"></script>
-  <footer class="footer">
-  <p class="footer-text">© 2025 Crown & Oak Capital. All rights reserved.</p>
-  <p class="footer-links"><a href="/privacy_policy/">Privacy Policy</a> | <a href="/legal/terms-of-use.html">Terms of Use</a> | <a href="/accessability/">Accessibility</a></p>
-</footer>
+  <section class="newsletter">
+    <h2>Stay Informed</h2>
+    <p>Get our latest intelligence delivered straight to your inbox.</p>
+    <form action="https://formspree.io/f/xyyrlvgg" method="POST">
+      <input type="email" name="email" placeholder="Email Address" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </section>
+</div>
 
 <script src="/co-header.js"></script>
 </body>
