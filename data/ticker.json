@@ -1,9 +1,6 @@
 {
-  "items": [
-    "10Y Treasury: 3.85%",
-    "Avg Cap-Rate: 5.2%",
-    "LTV Avg: 65%",
-    "YTD Deal Vol: $1.4B",
-    "Avg IRR: 18.2%"
-  ]
+  "series": [
+    { "id": "10Y", "value": 3.85, "date": "2024-01-02", "source": "FRED" }
+  ],
+  "updatedAt": "2024-01-02T00:00:00.000Z"
 }
