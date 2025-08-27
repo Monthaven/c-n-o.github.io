@@ -881,16 +881,53 @@
     </div>
   </div>
   
-  <script>
-    // Form submission handling
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.querySelector('.contact-form');
-      
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Here you would normally send the form data to your server
-        // For demonstration purposes, we'll just show an alert
-        alert('Thank you for your submission. A member of our team will contact you shortly.');
+   <script>
+      // Integrate contact form with Web3Forms
+      document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.contact-form');
+
+        // Ensure all fields have a name attribute for Web3Forms
+        form.querySelectorAll('input, select, textarea').forEach((el, idx) => {
+          if (!el.name) el.name = el.id || `field_${idx}`;
+        });
+
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const formData = Object.fromEntries(new FormData(form).entries());
+          formData.access_key = '64300cfc-9ec4-4ec7-bd45-5a802945e58d';
+          formData.subject = 'Speak With Us Form Submission';
+
+          fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          })
+          .then(async response => {
+            const json = await response.json();
+            if (response.ok) {
+              form.innerHTML = `
+      <div style="text-align:center; padding:40px 20px;">
+        <div style="font-size:24px; margin-bottom:15px; color:#d4b45a; font-family:'Cormorant Garamond',serif;">
+          Request Submitted
+        </div>
+        <p style="font-size:15px; color:rgba(212,180,90,.9); max-width:600px; margin:0 auto 20px;">
+          Thank you for reaching out. A member of our team will contact you shortly.
+        </p>
+        <button type="button" class="submit-btn" style="margin-top:20px;" onclick="window.location.href='/'">
+          RETURN TO HOME
+        </button>
+      </div>`;
+              form.style.padding = '60px';
+              form.querySelector('div').scrollIntoView({ behavior:'smooth', block:'center' });
+            } else {
+              alert(json.message || 'Form submission failed');
+            }
+          })
+          .catch(() => alert('Form submission failed'));
       });
     });
   </script>
