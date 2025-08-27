@@ -42,6 +42,10 @@
     .card a { color: #d4b45a; font-size: 14px; }
     .article-list { list-style: none; padding: 0; }
     .article-list li { margin-bottom: 16px; }
+    .article-list a { color: #d4b45a; text-decoration: none; }
+    .article-list a:hover { text-decoration: underline; }
+    .stock-indicator { margin-top: 8px; font-size: 14px; }
+    .stock-indicator span { margin-right: 12px; }
     .newsletter input[type=email] {
       padding: 12px;
       width: 60%;
@@ -85,34 +89,25 @@
   </div>
 </header>
 <div class="overlay" aria-hidden="true"></div>
-<div class="ticker" id="ticker" aria-live="polite"></div>
-<script>
-(async function(){
-  const res = await fetch('/data/ticker.json', { cache:'no-store' });
-  const { series, updatedAt } = await res.json();
-  document.getElementById('ticker').innerHTML =
-    series.map(s => `<span>${s.id}: ${s.value.toFixed ? s.value.toFixed(2)+'%' : s.value}</span>`).join('') +
-    `<span style="opacity:.6">Updated ${new Date(updatedAt).toLocaleDateString()}</span>`;
-})();
-</script>
 <main class="container">
   <div class="page-header">
     <h1>Market Intel</h1>
+    <div id="ticker" class="stock-indicator" aria-live="polite"></div>
     <p>Actionable insights and research to inform your next investment decision.</p>
   </div>
 
   <section class="snapshot">
     <h2>Market Snapshot</h2>
     <ul>
-      <li>National cap-rate compression continues in secondary markets.</li>
-      <li>Rent growth accelerated <span data-kpi="rentYoY"></span>% year-over-year. <a href="#" class="methodology-link" data-method="/data/msa/houston.json">Source</a></li>
-      <li>Financing costs expected to stabilize in Q3 2025.</li>
-      <li>Logistics and life sciences remain high-conviction sectors.</li>
+      <li>Cap rates in secondary markets continue to compress, averaging 5.7% nationally.</li>
+      <li>Rent growth accelerated <span data-kpi="rentYoY"></span>% year-over-year across major MSAs. <a href="#" class="methodology-link" data-method="/data/msa/houston.json">Source</a></li>
+      <li>Construction pipeline up 8% over prior year, led by multifamily starts.</li>
+      <li>Logistics and life sciences remain high-conviction sectors for institutional investors.</li>
     </ul>
   </section>
 
   <section class="featured">
-    <h2>Featured Research</h2>
+    <h2>Latest Market Reports</h2>
     <div class="cards">
       <div class="card">
         <h3>Q2 2025 Houston Market Outlook</h3>
@@ -120,14 +115,14 @@
         <a href="../images/Q2_2025_Houston_Market_Outlook.pdf" target="_blank">Download Report</a>
       </div>
       <div class="card">
-        <h3>Sunbelt Industrial Review</h3>
-        <p>Supply-demand imbalance is fueling double-digit rent growth.</p>
-        <a href="#">Coming Soon</a>
+        <h3>Atlanta Multifamily Case Study</h3>
+        <p>Value-add project delivers 20% IRR in a fast-growing Sunbelt MSA.</p>
+        <a href="../images/Atlanta_Multifamily_Value-Add_Case_Study_20_IRR.pdf" target="_blank">Download Report</a>
       </div>
       <div class="card">
-        <h3>Life Sciences Update</h3>
-        <p>Biotech clusters expand as VC funding rebounds.</p>
-        <a href="#">Coming Soon</a>
+        <h3>Florida Taxes &amp; Insurance Study</h3>
+        <p>How rising costs affect multifamily underwriting across the state.</p>
+        <a href="../images/Florida_Multifamily_Taxes_Insurance_2025_Study.pdf" target="_blank">Download Report</a>
       </div>
     </div>
   </section>
@@ -135,9 +130,9 @@
   <section class="articles">
     <h2>Insights &amp; Commentary</h2>
     <ul class="article-list">
-      <li><a href="#">Rate Cuts and CRE Valuations</a></li>
-      <li><a href="#">Secondary Markets Outperforming</a></li>
-      <li><a href="#">Unlocking Value in Industrial Assets</a></li>
+      <li><a href="#">How Rate Cuts Impact CRE Valuations</a></li>
+      <li><a href="#">Secondary Markets Outperform Primary Metros</a></li>
+      <li><a href="#">Unlocking Value in Industrial Real Estate</a></li>
     </ul>
   </section>
 
@@ -156,6 +151,15 @@
   <button id="methodology-close">Close</button>
 </dialog>
 
+<script>
+(async function(){
+  const res = await fetch('/data/ticker.json', { cache:'no-store' });
+  const { series, updatedAt } = await res.json();
+  document.getElementById('ticker').innerHTML =
+    series.map(s => `<span>${s.id}: ${s.value.toFixed ? s.value.toFixed(2)+'%' : s.value}</span>`).join('') +
+    `<span style="opacity:.6">Updated ${new Date(updatedAt).toLocaleDateString()}</span>`;
+})();
+</script>
 <script src="/assets/js/intel.js"></script>
 <script src="/co-header.js"></script>
 </body>
