@@ -6,7 +6,8 @@
     document.querySelectorAll('[data-kpi]').forEach(el => {
       const key = el.getAttribute('data-kpi');
       if (json[key] != null) {
-        el.textContent = json[key];
+        const val = json[key];
+        el.textContent = typeof val === 'number' ? val.toFixed(1) : val;
       }
     });
   } catch(err) {
