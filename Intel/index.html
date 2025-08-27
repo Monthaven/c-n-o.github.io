@@ -59,6 +59,9 @@
       border: none;
       cursor: pointer;
     }
+    .methodology-link { font-size: 12px; color: #d4b45a; margin-left: 6px; }
+    dialog { background: #14161E; border: 1px solid rgba(212,180,90,0.2); color: #d4b45a; padding: 20px; }
+    dialog button { margin-top: 12px; padding: 8px 16px; background: #d4b45a; color: #0a0c14; border: none; cursor: pointer; }
   </style>
 </head>
 <body class="page-with-fixed-header">
@@ -92,7 +95,7 @@
     `<span style="opacity:.6">Updated ${new Date(updatedAt).toLocaleDateString()}</span>`;
 })();
 </script>
-<div class="container">
+<main class="container">
   <div class="page-header">
     <h1>Market Intel</h1>
     <p>Actionable insights and research to inform your next investment decision.</p>
@@ -102,7 +105,7 @@
     <h2>Market Snapshot</h2>
     <ul>
       <li>National cap-rate compression continues in secondary markets.</li>
-      <li>Rent growth accelerated <span data-kpi="rentYoY"></span>% year-over-year.</li>
+      <li>Rent growth accelerated <span data-kpi="rentYoY"></span>% year-over-year. <a href="#" class="methodology-link" data-method="/data/msa/houston.json">Source</a></li>
       <li>Financing costs expected to stabilize in Q3 2025.</li>
       <li>Logistics and life sciences remain high-conviction sectors.</li>
     </ul>
@@ -146,8 +149,14 @@
       <button type="submit">Subscribe</button>
     </form>
   </section>
-</div>
+</main>
 
+<dialog id="methodology-dialog">
+  <p id="methodology-content"></p>
+  <button id="methodology-close">Close</button>
+</dialog>
+
+<script src="/assets/js/intel.js"></script>
 <script src="/co-header.js"></script>
 </body>
 </html>
